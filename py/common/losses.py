@@ -155,3 +155,37 @@ def distill(
     target = X.apply(teacher_params, 0.5 * (s + t), t, step1, label, train=False)
 
     return np.sum((Xst_Is - target) ** 2)
+
+
+def lagrangian_distill(
+    params: Parameters,
+    x0: np.ndarray,
+    x1: np.ndarray,
+    label: np.ndarray,
+    s: float,
+    t: float,
+    dropout_keys: np.ndarray,
+    *,
+    interp: interpolant.Interpolant,
+    X: flow_map.FlowMap,
+    apply_b: Callable,
+    b_params: Parameters,
+) -> float:
+    """Lagrangian distillation from a pre-trained flow."""
+    rng1 = {"dropout": dropout_keys[0]}
+    rng2 = {"dropout": dropout_keys[1]}
+
+    # compute the evaluation point
+    Is = interp.calc_It(s, x0, x1)
+    Xst_Is = X.apply(params, s, t, Is, label, train=True, rngs=rng1)
+
+    # compute the teacher at the evaluation point
+    b_eval = apply_b(b_params, t, Xst_Is, label, train=False)
+
+    # compute the time derivative at the evaluation point
+    dt_Xst = X.apply(
+        params, s, t, Xst_Is, label, train=True, method="partial_t", rngs=rng2
+    )
+
+    # minimize square residual
+    return np.sum((dt_Xst - b_eval) ** 2)
