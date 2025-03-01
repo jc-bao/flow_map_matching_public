@@ -8,7 +8,7 @@ Loss functions for learning.
 import jax
 from jax.flatten_util import ravel_pytree
 import jax.numpy as np
-from typing import Dict
+from typing import Dict, Callable
 import functools
 from . import interpolant as interpolant
 from . import flow_map as flow_map

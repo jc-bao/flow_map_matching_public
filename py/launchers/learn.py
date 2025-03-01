@@ -179,7 +179,6 @@ def make_gmm_plot(
     params: Parameters,
     prng_key: np.ndarray,
 ) -> None:
-
     ## common plot parameters
     plt.close("all")
     sns.set_palette("deep")
@@ -253,7 +252,6 @@ def make_projection_plot(
     params: Parameters,
     prng_key: np.ndarray,
 ) -> None:
-
     ## common plot parameters
     plt.close("all")
     sns.set_palette("deep")
@@ -679,7 +677,7 @@ def log_metrics(
         pickle.dump(
             data,
             open(
-                f"{cfg.output_folder}/{cfg.output_name}_{iteration//cfg.save_freq}.npy",
+                f"{cfg.output_folder}/{cfg.output_name}_{iteration // cfg.save_freq}.npy",
                 "wb",
             ),
         )
@@ -1031,6 +1029,7 @@ if __name__ == "__main__":
         entity=cfg.wandb_entity,
         name=cfg.wandb_name,
         config=cfg.to_dict(),
+        mode="online",
     )
     print("Wandb set up.")
     print("nbatches:", cfg.nbatches)

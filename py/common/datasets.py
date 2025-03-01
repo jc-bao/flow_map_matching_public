@@ -54,10 +54,10 @@ def get_dataset(cfg: config_dict.ConfigDict):
     elif cfg.target == "cifar10":
         cifar10 = {
             "train": torchvision.datasets.CIFAR10(
-                "/scratch/nb3397/datasets", train=True, download=True
+                "../../datasets", train=True, download=True
             ),
             "test": torchvision.datasets.CIFAR10(
-                "/scratch/nb3397/datasets", train=False, download=True
+                "../../datasets", train=False, download=True
             ),
         }
 
